@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supply5 - Premium Fitness Supplements</title>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9XZCJH9MRJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-9XZCJH9MRJ');
+</script>
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
+    <style>
+        /* USP-bar onderaan */
+.usp-bar-bottom {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  z-index: 150;
+  box-shadow: 0 -2px 10px #0008;
+}
+
+.usp-bar {
+  width: 100%;
+  background: #111;
+  color: #fff;
+  overflow: hidden;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.usp-bar-track {
+  display: flex;
+  width: max-content;
+  animation: usp-scroll 25s linear infinite;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+@keyframes usp-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.usp-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.usp-paypal {
+  background: #ffc439;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 0.95em;
+  margin-left: 2px;
+  font-weight: bold;
+}
+.paypal-pay { color: #222; }
+.paypal-pal { color: #003087; }
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: rgba(0, 0, 0, 0.8);
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            height: 50px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 100%;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-menu li {
+            margin-left: 2rem;
+        }
+
+        .nav-menu a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+            font-size: 1.1rem;
+        }
+
+        .nav-menu a:hover {
+            color: #e0e0e0;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('background.png') center/cover;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 2rem;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: #ffffff;
+            color: #000000;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            letter-spacing: 1px;
+        }
+
+        .cta-button:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-3px);
+        }
+
+        /* About Section */
+        .about {
+            padding: 6rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .about-image img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        /* Products Section */
+        .products {
+            padding: 6rem 5%;
+            background-color: #1a1a1a;
+        }
+
+        .products-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background-color: #242424;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .product-image {
+            height: 250px;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-image img {
+            max-width: 80%;
+            max-height: 80%;
+        }
+
+        .product-details {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .add-to-cart {
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .add-to-cart:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 6rem 5%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .form-full {
+            grid-column: 1 / span 2;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 1rem;
+            background-color: #242424;
+            border: none;
+            border-radius: 5px;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .submit-button {
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 1rem;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-button:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #000000;
+            padding: 2rem 5%;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            height: 40px;
+            margin-bottom: 1rem;
+        }
+
+        .social-links {
+            margin: 1.5rem 0;
+        }
+
+        .social-links a {
+            color: #ffffff;
+            margin: 0 0.5rem;
+            font-size: 1.5rem;
+            text-decoration: none;
+        }
+
+        .footer-text {
+            margin-top: 1rem;
+            color: #aaaaaa;
+        }
+
+        /* Shopping Cart */
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #ffffff;
+            color: #000000;
+            font-size: 0.8rem;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .cart-dropdown {
+            position: fixed;
+            top: 80px;
+            right: 5%;
+            width: 300px;
+            background-color: #242424;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            display: none;
+            z-index: 101;
+        }
+
+        .cart-dropdown.active {
+            display: block;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-image {
+            width: 50px;
+            height: 50px;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-right: 1rem;
+        }
+
+        .cart-item-image img {
+            max-width: 80%;
+            max-height: 80%;
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+        }
+
+        .cart-item-title {
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .cart-item-price {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .cart-item-remove {
+            background: none;
+            border: none;
+            color: #ff4d4d;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .cart-total {
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            text-align: right;
+            font-weight: 700;
+        }
+
+        .checkout-button {
+            display: block;
+            width: 100%;
+            background-color: #ffffff;
+            color: #000000;
+            text-align: center;
+            padding: 0.7rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .checkout-button:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* PayPal Button Styling */
+        .payment-methods {
+            margin-top: 1rem;
+        }
+
+        .payment-title {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: #cccccc;
+        }
+
+        #paypal-button-container {
+            margin-top: 1rem;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .about-content {
+                flex-direction: column;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .contact-form {
+                grid-template-columns: 1fr;
+            }
+
+            .form-full {
+                grid-column: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <!-- USP-bar onderaan de pagina -->
+<div class="usp-bar usp-bar-bottom">
+  <div class="usp-bar-track">
+    <div class="usp-item">✔️ Voor 23:59 besteld, morgen in huis</div>
+    <div class="usp-item">
+      ✔️ Betalen met 
+      <span class="usp-paypal">
+        <span class="paypal-pay">Pay</span><span class="paypal-pal">Pal</span>
+      </span>
+    </div>
+    <div class="usp-item">✔️ 14 dagen bedenktijd</div>
+    <div class="usp-item">✔️ Gratis verzending </div>
+    <!-- Herhaal voor vloeiende animatie -->
+    <div class="usp-item">✔️ Voor 23:59 besteld, morgen in huis</div>
+    <div class="usp-item">
+      ✔️ Betalen met 
+      <span class="usp-paypal">
+        <span class="paypal-pay">Pay</span><span class="paypal-pal">Pal</span>
+      </span>
+    </div>
+    <div class="usp-item">✔️ 14 dagen bedenktijd</div>
+    <div class="usp-item">✔️ Gratis verzending </div>
+  </div>
+</div>
+        <div class="nav-container">
+            <div class="logo">
+                <img src="supply5logo.png" alt="Supply5 Logo">
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="cart-icon" onclick="toggleCart()">
+                🛒
+                <span class="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Shopping Cart -->
+    <div class="cart-dropdown" id="cartDropdown">
+        <div id="cartItems">
+            <!-- Cart items will be added here -->
+        </div>
+        <div class="cart-total">Total: $<span id="cartTotal">0</span></div>
+        <a href="#" class="checkout-button" onclick="placeOrder()">Bestelling Plaatsen</a>
+
+        <div class="payment-methods">
+            <p class="payment-title">Or pay with:</p>
+            <div id="paypal-button-container"></div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Premium Fitness Supplements</h1>
+            <p>Elevate your performance with high-quality supplements designed for optimal results.</p>
+            <a href="#products" class="cta-button">Shop Now</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <h2 class="section-title">About Us</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <p>Supply5 is committed to providing the highest quality fitness supplements to help you achieve your fitness goals. Our products are formulated with premium ingredients, backed by science, and designed for maximum effectiveness.</p>
+                <br>
+                <p>Founded by fitness enthusiasts, we understand the importance of quality supplements in your fitness journey. Whether you're looking to build muscle, increase strength, or improve your overall performance, Supply5 has the products you need.</p>
+                <br>
+                <p>All our products are manufactured in state-of-the-art facilities and undergo rigorous testing to ensure purity, potency, and effectiveness. We stand behind every product we sell and are dedicated to helping you reach your fitness potential.</p>
+            </div>
+            <div class="about-image">
+                <img src="supply5logo.png" alt="About Supply5">
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <div class="products-container">
+            <h2 class="section-title">Our Products</h2>
+            <div class="product-grid">
+                <!-- Product 1 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="creatine.png" alt="Creatine">
+                    </div>
+                    <div class="product-details">
+                        <h3 class="product-title">Creatine</h3>
+                        <p class="product-price">$20</p>
+                        <button class="add-to-cart" onclick="addToCart('Creatine', 20, 'creatine.png')">Add to Cart</button>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="preworkout.png" alt="Pre-Workout">
+                    </div>
+                    <div class="product-details">
+                        <h3 class="product-title">Pre-Workout</h3>
+                        <p class="product-price">$40</p>
+                        <button class="add-to-cart" onclick="addToCart('Pre-Workout', 40, 'preworkout.png')">Add to Cart</button>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="massgainer.png" alt="Mass Gainer">
+                    </div>
+                    <div class="product-details">
+                        <h3 class="product-title">Mass Gainer</h3>
+                        <p class="product-price">$30</p>
+                        <button class="add-to-cart" onclick="addToCart('Mass Gainer', 30, 'massgainer.png')">Add to Cart</button>
+                    </div>
+                </div>
+                
+                <!-- Product 4 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="wheyprotein.png" alt="Whey Protein">
+                    </div>
+                    <div class="product-details">
+                        <h3 class="product-title">Whey Protein</h3>
+                        <p class="product-price">$50</p>
+                        <button class="add-to-cart" onclick="addToCart('Whey Protein', 50, 'wheyprotein.png')">Add to Cart</button>
+                    </div>
+                </div>
+                
+                <!-- Product 5 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="ashwagandha.png" alt="Ashwagandha">
+                    </div>
+                    <div class="product-details">
+                        <h3 class="product-title">Ashwagandha</h3>
+                        <p class="product-price">$25</p>
+                        <button class="add-to-cart" onclick="addToCart('Ashwagandha', 25, 'ashwagandha.png')">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+    <h2 class="section-title">Contact Us</h2>
+    <form class="contact-form" id="contactForm" action="https://formspree.io/f/xrbqvaop" method="POST">
+        <div>
+            <input type="text" name="name" placeholder="Your Name" required>
+        </div>
+        <div>
+            <input type="email" name="email" placeholder="Your Email" required>
+        </div>
+        <div class="form-full">
+            <input type="text" name="subject" placeholder="Subject" required>
+        </div>
+        <div class="form-full">
+            <textarea name="message" placeholder="Your Message" required></textarea>
+        </div>
+        <div class="form-full">
+            <button type="submit" class="submit-button">Send Message</button>
+        </div>
+    </form>
+</section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="social-links">
+  <a href="https://www.facebook.com/andrewtate" target="_blank" aria-label="Facebook">
+    <img src="facebook.png" alt="Facebook" style="width:24px; height:24px;">
+  </a>
+  <a href="https://www.instagram.com/rahel040._" target="_blank" aria-label="Instagram">
+    <img src="instagram.png" alt="Instagram" style="width:24px; height:24px;">
+  </a>
+  <a href="https://www.twitter.com/rmondrugs" target="_blank" aria-label="Twitter">
+    <img src="twitter.png" alt="Twitter" style="width:24px; height:24px;">
+  </a>
+  <a href="https://www.tiktok.com/@rma040._" target="_blank" aria-label="TikTok">
+    <img src="tiktok.png" alt="TikTok" style="width:24px; height:24px;">
+  </a>
+</div>
+            <p>Email: 560249@student.fontys.nl</p>
+            <p class="footer-text">&copy; 2025 Supply5. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Shopping Cart Functionality
+        let cart = [];
+        let cartTotal = 0;
+
+        function toggleCart() {
+            const cartDropdown = document.getElementById('cartDropdown');
+            cartDropdown.classList.toggle('active');
+        }
+
+        function addToCart(productName, price, imagePath) {
+            // Check if product is already in cart
+            const existingProduct = cart.find(item => item.name === productName);
+            
+            if (existingProduct) {
+                existingProduct.quantity += 1;
+            } else {
+                cart.push({
+                    name: productName,
+                    price: price,
+                    quantity: 1,
+                    image: imagePath
+                });
+            }
+            
+            updateCart();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        function updateCart() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartCountElement = document.querySelector('.cart-count');
+            const cartTotalElement = document.getElementById('cartTotal');
+            
+            // Clear existing items
+            cartItemsContainer.innerHTML = '';
+            
+            // Calculate total and count
+            let total = 0;
+            let count = 0;
+            
+            // Add each item to the cart
+            cart.forEach((item, index) => {
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                
+                cartItem.innerHTML = `
+                    <div class="cart-item-image">
+                        <img src="${item.image}" alt="${item.name}">
+                    </div>
+                    <div class="cart-item-details">
+                        <p class="cart-item-title">${item.name} x${item.quantity}</p>
+                        <p class="cart-item-price">$${item.price * item.quantity}</p>
+                    </div>
+                    <button class="cart-item-remove" onclick="removeFromCart(${index})">×</button>
+                `;
+                
+                cartItemsContainer.appendChild(cartItem);
+                
+                total += item.price * item.quantity;
+                count += item.quantity;
+            });
+            
+            // Update total and count
+            cartTotalElement.textContent = total;
+            cartCountElement.textContent = count;
+            
+            // If cart is empty, show message
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p>Your cart is empty</p>';
+            }
+        }
+
+        // PayPal Integration
+        paypal.Buttons({
+            // Set up the transaction
+            createOrder: function(data, actions) {
+                // Calculate current cart total
+                let totalAmount = document.getElementById('cartTotal').textContent;
+                
+                // Create the order
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: totalAmount
+                        }
+                    }]
+                });
+            },
+            
+            // Handle successful transaction
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    // Show success message with payer name (PayPal login info)
+                    alert('Transaction completed by ' + details.payer.name.given_name + '! Thank you for your purchase.');
+                    
+                    // Clear cart
+                    cart = [];
+                    updateCart();
+                    
+                    // Close cart dropdown
+                    document.getElementById('cartDropdown').classList.remove('active');
+                });
+            },
+            
+            // Handle errors
+            onError: function(err) {
+                console.error('PayPal error:', err);
+                alert('There was an error processing your payment. Please try again.');
+            }
+        }).render('#paypal-button-container');
+
+        
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+
+    <!-- Start of ChatBot (www.chatbot.com) code -->
+<script>
+  window.__ow = window.__ow || {};
+  window.__ow.organizationId = "19590d58-e09d-45d1-b704-59e6d09932da";
+  window.__ow.template_id = "5ba5a2ba-f67a-4987-b781-b6e8f6f0f197";
+  window.__ow.integration_name = "manual_settings";
+  window.__ow.product_name = "chatbot";   
+  ;(function(n,t,c){function i(n){return e._h?e._h.apply(null,n):e._q.push(n)}var e={_q:[],_h:null,_v:"2.0",on:function(){i(["on",c.call(arguments)])},once:function(){i(["once",c.call(arguments)])},off:function(){i(["off",c.call(arguments)])},get:function(){if(!e._h)throw new Error("[OpenWidget] You can't use getters before load.");return i(["get",c.call(arguments)])},call:function(){i(["call",c.call(arguments)])},init:function(){var n=t.createElement("script");n.async=!0,n.type="text/javascript",n.src="https://cdn.openwidget.com/openwidget.js",t.head.appendChild(n)}};!n.__ow.asyncInit&&e.init(),n.OpenWidget=n.OpenWidget||e}(window,document,[].slice))
+</script>
+<!-- 👇 jouw fetch-call script hier -->
+<script>
+  function placeOrder() {
+    if (cart.length === 0) {
+      alert("Je winkelmand is leeg!");
+      return;
+    }
+
+    const orderItems = cart.map(item => ({
+      product_id: getProductIdByName(item.name),
+      quantity: item.quantity,
+      price: item.price
+    }));
+
+    fetch("https://supply5-backend.onrender.com/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        customer_id: 1,
+        items: orderItems
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        alert("Bestelling geplaatst! Order ID: " + data.order_id);
+        cart = [];
+        updateCart();
+      })
+      .catch(err => {
+        console.error("Fout bij bestelling:", err);
+        alert("Er ging iets mis bij het plaatsen van de bestelling.");
+      });
+  }
+
+  function getProductIdByName(name) {
+    const mapping = {
+      "Creatine": 1,
+      "Pre-Workout": 2,
+      "Mass Gainer": 3,
+      "Whey Protein": 4,
+      "Ashwagandha": 5
+    };
+    return mapping[name] || 0;
+  }
+</script>
+
+    <!-- ...bestaande code... -->
+<div id="compareModal" class="compare-modal" style="display:none; position:fixed; bottom:30px; left:30px; background:#242424; color:#fff; border-radius:10px; box-shadow:0 2px 10px #0008; padding:20px; z-index:200; max-width:350px;">
+  <span style="float:right; cursor:pointer; font-size:1.5rem;" onclick="document.getElementById('compareModal').style.display='none'">&times;</span>
+  <h3 style="margin-top:0;">Vergelijk met andere merken</h3>
+  <div style="max-height:300px; overflow-y:auto;">
+    <table style="width:100%; border-collapse:collapse; font-size:0.95rem;">
+      <thead>
+        <tr>
+          <th style="border-bottom:1px solid #444; padding:6px;">Foto</th>
+          <th style="border-bottom:1px solid #444; padding:6px;">Product</th>
+          <th style="border-bottom:1px solid #444; padding:6px;">Merk</th>
+          <th style="border-bottom:1px solid #444; padding:6px;">Prijs</th>
+        </tr>
+      </thead>
+      <tbody id="compareTableBody">
+        <!-- Wordt gevuld door JavaScript -->
+      </tbody>
+    </table>
+  </div>
+</div>
+<button onclick="document.getElementById('compareModal').style.display='block'" style="position:fixed; bottom:30px; left:30px; z-index:201; background:#fff; color:#000; border:none; border-radius:50%; width:50px; height:50px; font-size:1.5rem; box-shadow:0 2px 10px #0008; cursor:pointer;">≡</button>
+    
+<script>
+  const compareProducts = [
+    { name: "Whey Protein", brand: "Supply5", price: "$50", image: "wheyprotein.png" },
+    { name: "Whey Protein", brand: "MyProtein", price: "$55", image: "wheyproteinmyprotein.png" },
+    { name: "Whey Protein", brand: "XXL Nutrition", price: "$60", image: "wheyproteinxxl.png" },
+    { name: "Mass Gainer", brand: "Supply5", price: "$30", image: "massgainer.png" },
+    { name: "Mass Gainer", brand: "Body&Fit", price: "$35", image: "massgainerbodyfit.png" },
+    { name: "Mass Gainer", brand: "Optimum Nutrition", price: "$40", image: "massgaineroptimum.png" },
+    { name: "Ashwagandha", brand: "Supply5", price: "$25", image: "ashwagandha.png" },
+    { name: "Ashwagandha", brand: "Holland & Barrett", price: "$28", image: "ashwagandhaholland.png" },
+    { name: "Ashwagandha", brand: "MyProtein", price: "$30", image: "ashwagandhamyprotein.png" }
+  ];
+
+  function renderCompareTable() {
+    const tbody = document.getElementById('compareTableBody');
+    tbody.innerHTML = '';
+    compareProducts.forEach(product => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="padding:6px; text-align:center;">
+          <img src="${product.image}" alt="${product.name}" style="width:38px; height:38px; object-fit:cover; border-radius:5px;">
+        </td>
+        <td style="padding:6px;">${product.name}</td>
+        <td style="padding:6px;">${product.brand}</td>
+        <td style="padding:6px;">${product.price}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  document.querySelector('button[onclick*="compareModal"]').addEventListener('click', renderCompareTable);
+</script>
+    
+</body>
+</html>
